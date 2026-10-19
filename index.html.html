@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabulous Kitty Party</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #71221b; 
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            margin: 0;
+        }
+
+        /* ----------------------------------------------------
+           PARTICLES CANVAS
+        ---------------------------------------------------- */
+        #particlesCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; 
+            z-index: 9999; 
+        }
+
+        /* ----------------------------------------------------
+           PAGE 1: HERO SECTION
+        ---------------------------------------------------- */
+        .page-1 {
+            position: relative;
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .hero-top-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 55%;
+            z-index: 1;
+        }
+
+        .hero-top-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .hero-card {
+            position: relative;
+            z-index: 2;
+            background-color: #f2eee3;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 15vh;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .hero-card-inner {
+            border: 1px solid #d4ccb9;
+            padding: 40px 20px 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .paperclip {
+            position: absolute;
+            top: -60px;
+            left: 20px;
+            width: 40px;
+            height: 100px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: #71221b;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            white-space: nowrap; /* Tries to keep it on one line */
+        }
+
+        .hero-desc {
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: #1a1a1a;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .hero-card-bottom {
+            border: 1px solid #d4ccb9;
+            border-top: none;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-top: -5px;
+        }
+
+        .polaroid-overlay {
+            position: absolute;
+            bottom: -50px;
+            right: -30px;
+            background: white;
+            padding: 10px 10px 35px 10px;
+            box-shadow: 5px 15px 25px rgba(0,0,0,0.4);
+            transform: rotate(8deg);
+            width: 220px;
+            z-index: 3;
+            transition: transform 0.3s ease;
+        }
+
+        .polaroid-overlay:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .polaroid-overlay img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ----------------------------------------------------
+           PAGE 2: ENVELOPE SECTION
+        ---------------------------------------------------- */
+        .page-2 {
+            position: relative;
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('envelope-bg.jpg') no-repeat center center / cover;
+            background-color: #68131a; 
+            padding: 40px 20px;
+        }
+
+        .envelope-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 100px;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 400px;
+            min-width: 400px; /* Lock width so flaps don't detach */
+            height: 250px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #dccbb6;
+            z-index: 1;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .envelope-top-flap {
+            position: absolute;
+            top: -120px;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 200px solid transparent;
+            border-right: 200px solid transparent;
+            border-bottom: 120px solid #d3c0a9;
+            z-index: 1;
+        }
+
+        .letter {
+            position: absolute;
+            bottom: 15px;
+            left: 5%;
+            width: 90%;
+            height: 380px;
+            background-color: #ffffff;
+            z-index: 2;
+            padding: 20px 15px; 
+            text-align: center;
+            border-radius: 2px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 1s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        }
+
+        .top-text {
+            font-size: 0.75rem;
+            color: #4a4a4a;
+            margin-bottom: 10px; 
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .cursive-text {
+            font-family: 'Alex Brush', cursive;
+            font-size: 1.45rem; 
+            color: #333333;
+            line-height: 1.35; 
+            margin-bottom: 15px; 
+        }
+
+        .details-text {
+            font-size: 0.9rem;
+            color: #4a4a4a;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .details-text .date {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .envelope-left-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-top: 125px solid transparent;
+            border-bottom: 125px solid transparent;
+            border-left: 200px solid #e3d4c3;
+            z-index: 3;
+        }
+
+        .envelope-right-flap {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-top: 125px solid transparent;
+            border-bottom: 125px solid transparent;
+            border-right: 200px solid #e3d4c3;
+            z-index: 3;
+        }
+
+        .envelope-bottom-flap {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 200px solid transparent;
+            border-right: 200px solid transparent;
+            border-bottom: 140px solid #ebdacc;
+            z-index: 4;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .wax-seal {
+            position: absolute;
+            bottom: 115px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #71221b 40%, #4a130f 100%);
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.6), 0 4px 6px rgba(0,0,0,0.3);
+            border: 2px solid #5a1a14;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wax-seal::after {
+            content: '';
+            width: 35px;
+            height: 35px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .envelope-container:hover .letter, 
+        .envelope-container.active .letter {
+            transform: translateY(-220px); 
+        }
+
+        /* ----------------------------------------------------
+           PAGE 3: PHOTO GALLERY SECTION 
+        ---------------------------------------------------- */
+        .page-3 {
+            position: relative;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('gallery-bg.jpg') no-repeat center center / cover;
+            background-color: #5c1813; 
+            padding: 80px 0;
+            overflow: hidden; 
+        }
+
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-track {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            padding: 20px 20px;
+            animation: scroll-gallery 25s linear infinite;
+        }
+
+        .gallery-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-gallery {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 10px)); } 
+        }
+
+        .photo-wrapper {
+            position: relative;
+            width: 320px; 
+            flex-shrink: 0;
+            background: #fff;
+            padding: 8px; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-wrapper:hover {
+            transform: scale(1.03) !important;
+            z-index: 10;
+        }
+
+        .photo-wrapper:nth-child(even) { transform: rotate(1.5deg); }
+        .photo-wrapper:nth-child(odd) { transform: rotate(-1.5deg); }
+        .photo-wrapper:nth-child(3n) { transform: rotate(2deg); }
+
+        .photo-wrapper img.main-photo {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .clip-svg {
+            position: absolute;
+            top: -22px;
+            width: 45px;
+            height: 60px;
+            z-index: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+        }
+
+        /* ----------------------------------------------------
+           PAGE 4: MAP & DIRECTIONS SECTION
+        ---------------------------------------------------- */
+        .map-section {
+            position: relative;
+            width: 100vw;
+            padding: 60px 20px;
+            background-color: #f2eee3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .map-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: #71221b;
+            margin-bottom: 10px;
+        }
+
+        .map-subtitle {
+            font-size: 0.9rem;
+            color: #4a4a4a;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .map-container {
+            width: 100%;
+            max-width: 900px;
+            height: 400px;
+            border: 2px solid #d4ccb9;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .map-link-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 25px;
+            background-color: #71221b;
+            color: #ffffff;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(113, 34, 27, 0.4);
+            position: relative;
+            z-index: 10;
+        }
+
+        .map-link-btn:hover {
+            background-color: #4a130f;
+            transform: translateY(-2px);
+        }
+
+        /* ----------------------------------------------------
+           PAGE 5: THANK YOU SECTION
+        ---------------------------------------------------- */
+        .thank-you-section {
+            position: relative;
+            width: 100vw;
+            min-height: 40vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: url('thankyou-bg.jpg') no-repeat center center / cover;
+            background-color: #68131a; 
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .thank-you-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(113, 34, 27, 0.7); 
+            z-index: 1;
+        }
+
+        .thank-you-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .thank-you-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.5rem;
+            color: #f2eee3;
+            margin-bottom: 15px;
+        }
+
+        .thank-you-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #f2eee3;
+            font-weight: 400;
+        }
+
+        /* ----------------------------------------------------
+           MOBILE RESPONSIVENESS FIXES
+        ---------------------------------------------------- */
+        @media (max-width: 768px) {
+            .hero-card {
+                padding: 15px;
+                margin-top: 15vh;
+            }
+            .hero-card-inner {
+                padding: 20px 5px; /* Extremely tight padding for mobile */
+            }
+            .hero-subtitle {
+                font-size: 0.8rem;
+            }
+            .hero-title {
+                font-size: 2.2rem; /* Shrunk title significantly to ensure it stays on one line */
+                margin-bottom: 10px;
+                white-space: nowrap;
+            }
+            .hero-desc {
+                font-size: 0.7rem; 
+                margin-bottom: 5px;
+            }
+            .polaroid-overlay {
+                width: 100px; /* Reduced polaroid size further to avoid covering text */
+                bottom: -20px;
+                right: -5px;
+                padding: 6px 6px 20px 6px;
+            }
+            .hero-card-bottom {
+                font-size: 0.6rem;
+                padding: 10px;
+            }
+            .paperclip {
+                width: 25px;
+                height: 60px;
+                top: -35px;
+                left: 10px;
+            }
+            .photo-wrapper {
+                width: 250px; 
+            }
+            .photo-wrapper img.main-photo {
+                height: 350px;
+            }
+            .map-title {
+                font-size: 2.8rem;
+            }
+            .map-container {
+                height: 300px;
+            }
+            .thank-you-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .envelope-container {
+                transform: scale(0.70); /* Scaled down the entire envelope 400px block to fit mobile width */
+            }
+            .envelope-wrapper {
+                margin-top: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SHINING PARTICLES OVERLAY -->
+    <canvas id="particlesCanvas"></canvas>
+
+    <!-- SECTION 1: HERO / HOME PAGE -->
+    <section class="page-1">
+        <div class="hero-top-bg">
+            <img src="main-bg.jpg" alt="Party Background">
+        </div>
+
+        <div class="hero-card">
+            <div class="hero-card-inner">
+                <svg class="paperclip" viewBox="0 0 50 120" fill="none" stroke="#71221b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M25,110 C15,110 10,105 10,95 L10,30 C10,15 20,5 30,5 C40,5 45,15 45,30 L45,85 C45,92 40,97 33,97 C26,97 22,92 22,85 L22,40"></path>
+                </svg>
+
+                <div class="hero-subtitle">23/10/26</div>
+                <div class="hero-title">Kitty party with us</div>
+                <div class="hero-desc">
+                    GREAT AMBIANCE, DELICIOUS FOOD<br>AND LIVELY VIBES
+                </div>
+            </div>
+            
+            <div class="hero-card-bottom">
+                <span>PARTY STARTS HERE</span>
+                <span class="arrow">&#10230;</span>
+                <span>Oakaz Restaurant</span>
+            </div>
+
+            <div class="polaroid-overlay">
+                <img src="polaroid-pic.jpg" alt="Polaroid Vibes">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: ENVELOPE INVITATION -->
+    <section class="page-2">
+        <div class="envelope-wrapper">
+            <div class="envelope-container" id="envelope">
+                
+                <div class="envelope-back"></div>
+                <div class="envelope-top-flap"></div>
+                
+                <div class="letter">
+                    <p class="top-text">Drape yourself in grace,</p>
+                    <p class="cursive-text">
+                        Add a little sparkle, and bring<br>your beautiful smile!<br>
+                        Let's celebrate the timeless<br>charm of sarees,<br>
+                        with laughter, love, and a lovely<br>afternoon together
+                    </p>
+                    <div class="details-text">
+                        <p class="date">23/10/26</p>
+                        <p>📍 Oakaz Restaurant</p>
+                        <p>Time 4:30pm</p>
+                    </div>
+                </div>
+
+                <div class="envelope-left-flap"></div>
+                <div class="envelope-right-flap"></div>
+                <div class="envelope-bottom-flap"></div>
+                <div class="wax-seal"></div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: PHOTO GALLERY SLIDER -->
+    <section class="page-3">
+        <div class="slider-container">
+            <div class="gallery-track">
+                
+                <!-- ORIGINAL 5 PHOTOS -->
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo1.jpg" alt="Party Photo 1" class="main-photo">
+                </div>
+                
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo2.jpg" alt="Party Photo 2" class="main-photo">
+                </div>
+                
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo3.jpg" alt="Party Photo 3" class="main-photo">
+                </div>
+
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo4.jpg" alt="Party Photo 4" class="main-photo">
+                </div>
+
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo5.jpg" alt="Party Photo 5" class="main-photo">
+                </div>
+
+                <!-- DUPLICATE 5 PHOTOS FOR INFINITE SCROLL LOOP -->
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo1.jpg" alt="Party Photo 1" class="main-photo">
+                </div>
+                
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo2.jpg" alt="Party Photo 2" class="main-photo">
+                </div>
+                
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo3.jpg" alt="Party Photo 3" class="main-photo">
+                </div>
+
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo4.jpg" alt="Party Photo 4" class="main-photo">
+                </div>
+
+                <div class="photo-wrapper">
+                    <svg class="clip-svg" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="18" r="10" fill="none" stroke="#cfa65a" stroke-width="4"/>
+                        <rect x="15" y="28" width="30" height="25" rx="2" fill="#cfa65a"/>
+                        <rect x="12" y="48" width="36" height="8" rx="2" fill="#a8803a"/>
+                    </svg>
+                    <img src="photo5.jpg" alt="Party Photo 5" class="main-photo">
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: MAP & DIRECTIONS -->
+    <section class="page-4 map-section">
+        <h2 class="map-title">Getting There</h2>
+        <div class="map-subtitle">Oakaz Restaurant &bull; Follow the map below</div>
+        
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.562065842882!2d77.21856111455913!3d28.61291198242542!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce2d4a6e87b6d%3A0xb5e75877f0d04db9!2sIndia%20Gate!5e0!3m2!1sen!2sin!4v1689100000000!5m2!1sen!2sin" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+        
+        <a href="https://share.google/GoqRhytQG6bwbuRxg" target="_blank" class="map-link-btn">
+            📍 OPEN IN GOOGLE MAPS
+        </a>
+    </section>
+
+    <!-- SECTION 5: THANK YOU -->
+    <section class="thank-you-section">
+        <div class="thank-you-overlay"></div>
+        <div class="thank-you-content">
+            <h2 class="thank-you-title">Thank you for coming</h2>
+            <div class="thank-you-subtitle">Looking forward to seeing you there!</div>
+        </div>
+    </section>
+
+    <script>
+        // Envelope click interaction
+        const envelope = document.getElementById('envelope');
+        envelope.addEventListener('click', () => {
+            envelope.classList.toggle('active');
+        });
+
+        // ----------------------------------------------------
+        // FALLING SHINING PARTICLES (WHITE & GOLDEN)
+        // ----------------------------------------------------
+        (function initShiningParticles() {
+            const pCanvas = document.getElementById('particlesCanvas');
+            const pCtx = pCanvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const particleCount = 60; 
+
+            function resize() {
+                width = pCanvas.width = window.innerWidth;
+                height = pCanvas.height = window.innerHeight;
+            }
+
+            class Particle {
+                constructor() {
+                    this.reset(true);
+                }
+
+                reset(initial = false) {
+                    this.x = Math.random() * width;
+                    this.y = initial ? Math.random() * height : -10;
+                    this.size = Math.random() * 2.5 + 0.8; 
+                    this.speedY = Math.random() * 1.5 + 0.5; 
+                    this.speedX = Math.random() * 0.6 - 0.3; 
+                    this.opacity = Math.random() * 0.8 + 0.2;
+                    this.twinkleSpeed = Math.random() * 0.03 + 0.01;
+                    this.twinkleDir = Math.random() > 0.5 ? 1 : -1;
+                    
+                    const colors = [
+                        '255, 255, 255', // White
+                        '255, 215, 0',   // Gold
+                        '218, 165, 32',  // Goldenrod
+                        '255, 223, 150'  // Pale gold
+                    ];
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                }
+
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX + Math.sin(this.y * 0.01) * 0.4;
+
+                    this.opacity += this.twinkleSpeed * this.twinkleDir;
+                    if (this.opacity >= 0.95) {
+                        this.opacity = 0.95;
+                        this.twinkleDir = -1;
+                    } else if (this.opacity <= 0.25) {
+                        this.opacity = 0.25;
+                        this.twinkleDir = 1;
+                    }
+
+                    if (this.y > height + 10 || this.x < -10 || this.x > width + 10) {
+                        this.reset(false);
+                    }
+                }
+
+                draw() {
+                    pCtx.save();
+                    pCtx.beginPath();
+                    pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    pCtx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+                    
+                    pCtx.shadowBlur = 8;
+                    pCtx.shadowColor = `rgba(${this.color}, ${this.opacity})`;
+                    
+                    pCtx.fill();
+                    pCtx.restore();
+                }
+            }
+
+            function setup() {
+                resize();
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animate() {
+                pCtx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resize);
+            setup();
+            animate();
+        })();
+    </script>
+</body>
+</html>
